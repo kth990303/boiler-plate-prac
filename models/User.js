@@ -37,4 +37,4 @@ const userSchema=mongoose.Schema({
 const User=mongoose.model('User', userSchema);
 
 // 다른 파일에서도 이 모델을 쓸 수 있도록
-module.exports={}
+module.exports={ User }
