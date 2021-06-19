@@ -49,6 +49,7 @@ userSchema.pre('save', function(next){
             });
         });
     }
+    else next();
 });
 
 const User=mongoose.model('User', userSchema);
