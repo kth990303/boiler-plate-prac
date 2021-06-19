@@ -3,15 +3,15 @@ const app=express();
 const port=3000;
 const { User }=require("./models/User");
 
+const config=require('./config/key');
+
 app.use(express.urlencoded({
     extended:true
 }));
 app.use(express.json());
 
 const mongoose=require('mongoose');
-mongoose.connect
-('mongodb+srv://johnahn:abcd1234@boilerplate.lbu3u.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
-, {
+mongoose.connect(config.mongoURI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
