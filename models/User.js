@@ -70,6 +70,16 @@ userSchema.methods.generateToken=function(cb){
     });
 }
 
+userSchema.statics.findByToken=function(token, cb){
+    const user=this;
+    jwt.verify(token, 'secretToken', function(err, decoded){
+        user.findOne({"_id": decoded, "token": token}, function(err, user){
+            if(err) return cb(err);
+            cb(null, user);
+        });
+    });
+}
+
 const User=mongoose.model('User', userSchema);
 
 // 다른 파일에서도 이 모델을 쓸 수 있도록

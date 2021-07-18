@@ -2,6 +2,7 @@ const express=require('express');
 const app=express();
 const port=3000;
 const cookieParser=require('cookie-parser');
+const { auth }=require('./middleware/auth')
 const { User }=require("./models/User");
 const config=require('./config/key');
 
@@ -11,6 +12,7 @@ app.use(express.urlencoded({
 app.use(express.json());
 
 const mongoose=require('mongoose');
+const { json } = require('body-parser');
 mongoose.connect(config.mongoURI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -26,7 +28,7 @@ app.get('/', (req, res)=>{
     res.send('Hello world!');
 });
 
-app.post('/register', (req, res)=>{
+app.post('/api/users/register', (req, res)=>{
     // 회원가입할 때 필요한 정보들을 
     // client에서 가져오면
     // 그것들을 db에 넣어준다.
@@ -41,7 +43,7 @@ app.post('/register', (req, res)=>{
     });
 });
 
-app.post('/login', (req, res)=>{
+app.post('/api/users/login', (req, res)=>{
     // 요청된 이메일을 db에서 찾는다.
     User.findOne({email: req.body.email}, (err, user)=>{
         if(!user){
@@ -71,8 +73,37 @@ app.post('/login', (req, res)=>{
             
         });
     });
-    
 });
+
+// auth라는 미들웨어를 추가
+// request를 받으면 call back function 호출 전에 middleware실행
+app.get('/api/users/auth', auth, (req, res)=>{
+    res.status(200).json({
+        _id: req.user._id, 
+        isAdmin: req.user.role===0?false:true, 
+        isAuth: true,
+        email: req.user.email,
+        name: req.user.name,
+        lastname: req.user.lastname,
+        role: req.user.role,
+        image: req.user.image
+    });
+});
+
+app.get('/api/users/logout', auth, (req, res)=>{
+    console.log(req.user);
+    user.findOneAndUpdate({_id:req.user._id}, {
+        token: ""
+    }, (err, user)=>{
+        if(err) return res.json({
+            success: false,
+            err
+        });
+        return res.status(200).send({
+            success: true
+        })
+    })
+})
 
 app.listen(port, ()=>{
     console.log(`Example app listening on port ${port}!`);
