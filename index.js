@@ -10,6 +10,7 @@ app.use(express.urlencoded({
     extended:true
 }));
 app.use(express.json());
+app.use(cookieParser());
 
 const mongoose=require('mongoose');
 const { json } = require('body-parser');
@@ -92,7 +93,7 @@ app.get('/api/users/auth', auth, (req, res)=>{
 
 app.get('/api/users/logout', auth, (req, res)=>{
     console.log(req.user);
-    user.findOneAndUpdate({_id:req.user._id}, {
+    User.findOneAndUpdate({_id:req.user._id}, {
         token: ""
     }, (err, user)=>{
         if(err) return res.json({
@@ -101,8 +102,8 @@ app.get('/api/users/logout', auth, (req, res)=>{
         });
         return res.status(200).send({
             success: true
-        })
-    })
+        });
+    });
 })
 
 app.listen(port, ()=>{
