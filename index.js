@@ -1,6 +1,6 @@
 const express=require('express');
 const app=express();
-const port=3000;
+const port=5000;
 const cookieParser=require('cookie-parser');
 const { auth }=require('./server/middleware/auth')
 const { User }=require("./server/models/User");
@@ -27,6 +27,10 @@ mongoose.connect(config.mongoURI, {
 
 app.get('/', (req, res)=>{
     res.send('Hello world!');
+});
+
+app.get('/api/hello', (req, res)=>{
+    res.send("안녕하세요~");
 });
 
 app.post('/api/users/register', (req, res)=>{
