@@ -1,4 +1,5 @@
 import React from 'react'
+import { withRouter } from 'react-router-dom'
 
 function RegisterPage() {
     return (
@@ -8,4 +9,4 @@ function RegisterPage() {
     )
 }
 
-export default RegisterPage
+export default withRouter(RegisterPage);
