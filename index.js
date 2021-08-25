@@ -21,7 +21,7 @@ mongoose.connect(config.mongoURI, {
     useFindAndModify: false,
 }).then(()=>{
     console.log('MongoDB Connected...');
-}).catch(()=>{
+}).catch((err)=>{
     console.log(err);
 })
 
